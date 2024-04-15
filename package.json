@@ -7,6 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd packages/react-frontend && npm run dev"
   },
+  "workspaces": [
+    "packages/react-frontend",
+    "packages/express-backend"
+  ],
   "author": "",
   "license": "ISC"
 }
