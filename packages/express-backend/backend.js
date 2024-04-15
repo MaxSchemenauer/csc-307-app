@@ -39,10 +39,10 @@ const users = {
 
 
 const findUserByName = (name) => {
-    return users["users_list"].filter(
-        (user) => user["name"] === name
-    );
-};
+    const filteredUsers = users.users_list.filter((user) => user.name.toLowerCase() === name.toLowerCase());
+    console.log("Filtered Users:", filteredUsers);
+    return filteredUsers;
+  };
 
 app.get("/users", (req, res) => {
     const name = req.query.name;
