@@ -1,11 +1,12 @@
 // backend.js
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
 
 app.use(express.json());
-
+app.use(cors());
 
 const users = {
     users_list: [
@@ -82,7 +83,7 @@ app.get("/users/:id", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.send("did you mean to go to http://localhost:8000/users?name=[name]");
+    res.send("did you mean to go to http://localhost:8000/users");
 });
 
 app.listen(port, () => {
