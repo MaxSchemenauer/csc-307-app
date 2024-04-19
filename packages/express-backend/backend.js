@@ -49,15 +49,30 @@ const findUserById = (id) =>
     users["users_list"].find((user) => user["id"] === id);
 
 
-const addUser = (user) => {
-    users["users_list"].push(user);
-    return user;
+const generateRandomId = () => {
+    // Generate a random number and convert it to a hexadecimal string
+    return Math.random().toString(16).slice(2);
 };
 
+const addUser = (user) => {
+    // Generate a random ID
+    const id = generateRandomId();
+    // Add the ID to the user object
+    const userWithId = { ...user, id };
+    // Push the user object with ID to the users_list
+    users["users_list"].push(userWithId);
+    // Return the user object with ID
+    return userWithId;
+};
+
+// POST route handler for adding a user
 app.post("/users", (req, res) => {
+    // Get the user data from the request body
     const userToAdd = req.body;
-    addUser(userToAdd);
-    res.status(201).send(); // Set the status code to 201 (Content Created)
+    // Add the user with a generated ID
+    const newUser = addUser(userToAdd);
+    // Send a response with status code 201 (Content Created) and the newly created user object
+    res.status(201).json(newUser);
 });
 
 
