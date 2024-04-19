@@ -30,9 +30,15 @@ function MyApp() {
 
   function updateList(person) { 
     postUser(person)
-      .then(() => setCharacters([...characters, person]))
+      .then(response => {
+        if (response.status === 201) {
+          setCharacters([...characters, person]);
+        } else {
+          console.log("Failed to add user. Status code:", response.status);
+        }
+      })
       .catch((error) => {
-        console.log(error);
+        console.log("Error:", error);
       })
 }
 
