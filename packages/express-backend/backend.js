@@ -72,7 +72,22 @@ app.post("/users", (req, res) => {
     // Add the user with a generated ID
     const newUser = addUser(userToAdd);
     // Send a response with status code 201 (Content Created) and the newly created user object
-    res.status(201).json(newUser);
+    res.status(201).send(newUser);
+});
+
+// DELETE route handler for deleting a user by ID
+app.delete("/users/:id", (req, res) => {
+    const idToDelete = req.params.id;
+    const index = users.users_list.findIndex(user => user.id === idToDelete);
+    if (index !== -1) {
+        // Remove the user from the users_list array
+        users.users_list.splice(index, 1);
+        // Send a response with status code 204 (No Content)
+        res.status(204).send();
+    } else {
+        // If the user with the given ID is not found, send a 404 response
+        res.status(404).send("User not found.");
+    }
 });
 
 
@@ -96,6 +111,8 @@ app.get("/users/:id", (req, res) => {
         res.send(result);
     }
 });
+
+
 
 app.get("/", (req, res) => {
     res.send("did you mean to go to http://localhost:8000/users");

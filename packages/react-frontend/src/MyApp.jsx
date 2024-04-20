@@ -20,27 +20,47 @@ function MyApp() {
   );
 
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
+  function removeOneCharacter(id) {
+    fetch(`http://localhost:8000/users/${id}`, {
+        method: "DELETE"
+    })
+    .then(response => {
+        if (response.status === 204) {
+            // If the delete operation is successful, update the state
+            setCharacters(characters.filter(character => character.id !== String(id)));
+        } else if (response.status === 404) {
+            // If the user is not found, log an error message
+            console.error("User not found.");
+        } else {
+            // If any other error occurs, log an error message
+            console.error("Failed to delete user.");
+        }
+    })
+    .catch(error => {
+        // If an error occurs during the fetch request, log the error
+        console.error("Error deleting user:", error);
     });
-    setCharacters(updated);
-  }
+}
+
 
 
   function updateList(person) { 
     postUser(person)
       .then(response => {
         if (response.status === 201) {
-          setCharacters([...characters, person]);
+          return response.json(); // Extract JSON data from the response
         } else {
-          console.log("Failed to add user. Status code:", response.status);
+          throw new Error("Failed to add user.");
         }
       })
-      .catch((error) => {
-        console.log("Error:", error);
+      .then(data => {
+        setCharacters([...characters, data]); // Update state with the new user object
       })
+      .catch(error => {
+        console.error("Error adding user:", error);
+      });
 }
+
 
   function postUser(person) {
     const promise = fetch("Http://localhost:8000/users", {
