@@ -9,16 +9,6 @@ import Form from "./Form";
 function MyApp() {
   const [characters, setCharacters] = useState([]);
 
-  return (
-    <div className="container">
-      <Table
-        characterData={characters}
-        removeCharacter={removeOneCharacter}
-      />
-      <Form handleSubmit={updateList} />
-    </div>
-  );
-
 
   function removeOneCharacter(id) {
     fetch(`http://localhost:8000/users/${id}`, {
@@ -27,7 +17,7 @@ function MyApp() {
     .then(response => {
         if (response.status === 204) {
             // If the delete operation is successful, update the state
-            setCharacters(characters.filter(character => character.id !== String(id)));
+            setCharacters(characters.filter(character => character._id !== String(id)));
         } else if (response.status === 404) {
             // If the user is not found, log an error message
             console.error("User not found.");
@@ -86,6 +76,16 @@ function MyApp() {
       .catch((error) => { console.log(error); });
   }, []);
 
+
+  return (
+    <div className="container">
+      <Table
+        characterData={characters}
+        removeCharacter={removeOneCharacter}
+      />
+      <Form handleSubmit={updateList} />
+    </div>
+  );
 }
 
 
